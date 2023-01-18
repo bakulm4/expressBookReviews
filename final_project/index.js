@@ -7,6 +7,7 @@ const genl_routes = require('./router/general.js').general;
 const app = express();
 
 app.use(express.json());
+app.use(express.static('public'));
 
 app.use("/customer",session({secret:"fingerprint_customer",resave: true, saveUninitialized: true}))
 
@@ -16,6 +17,7 @@ app.use("/customer/auth/*", function auth(req,res,next){
         jwt.verify(token, "access",(err,user)=>{
             if(!err){
                 req.user = user;
+                console.log(`Auth Middleware: user: `, req.session.authorization['username']);
                 next();
             }
             else{
